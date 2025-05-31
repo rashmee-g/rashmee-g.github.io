@@ -35,18 +35,6 @@ Logic gate-based traffic signal system built with ICs and breadboards.
 
 ---
 
-## File Structure
-/rashmee-g.github.io
-│
-├── index.html         # Main portfolio page
-├── resume.pdf         # Resume for download
-├── /images            # Folder for project screenshots
-│   ├── classcheck.png
-│   └── trafficlight.png
-└── README.md
-
----
-
 ## Contact
 
 Feel free to connect with me!
