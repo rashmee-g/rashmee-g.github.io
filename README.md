@@ -39,9 +39,9 @@ Logic gate-based traffic signal system built with ICs and breadboards.
 
 Feel free to connect with me!
 
-- 📧 rrg91@scarletmail.rutgers.edu  
-- 💼 [LinkedIn](https://www.linkedin.com/in/rashmee-gade-3446b0289/)  
-- 🧑‍💻 [GitHub](https://github.com/rashmee-g)
+- rrg91@scarletmail.rutgers.edu  
+- [LinkedIn](https://www.linkedin.com/in/rashmee-gade-3446b0289/)  
+- [GitHub](https://github.com/rashmee-g)
 
 ---
 
