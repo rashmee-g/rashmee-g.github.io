@@ -68,6 +68,19 @@
       background-color: #1f2937;
       color: white;
     }
+    button {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #1d4ed8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    }
+    button:hover {
+    background-color: #2563eb;
+    }
   </style>
 </head>
 <body>
@@ -78,27 +91,45 @@
   </header>
 
   <section id="projects">
-    <h2>Projects</h2>
-    <div class="project">
-      <h3>ClassCheck - GPS-Based Attendance Tracker</h3>
-      <p>Developed a mobile-responsive web app for professors to track student attendance using geolocation.</p>
-      <ul>
-        <li>Built with Node.js, SQL, HTML, CSS, and JavaScript</li>
-        <li>Collaborated with a team of 5 to define requirements and present a formal project proposal</li>
-        <li>Created backend logic for location verification and frontend for a user-friendly interface</li>
-      </ul>
-      <img src="images/classcheck.png" alt="Screenshot of ClassCheck project">
-    </div>
-    <div class="project">
-      <h3>Hardware-Integrated Traffic Light System</h3>
-      <p>Designed a sequential logic circuit using breadboards and ICs to simulate real traffic signal behavior.</p>
-      <ul>
-        <li>Implemented timing and transition logic using digital design principles</li>
-        <li>Tested and refined circuit operation to comply with safety standards</li>
-      </ul>
-      <img src="images/trafficlight.png" alt="Photo of Traffic Light Circuit">
-    </div>
-  </section>
+  <h2>Projects</h2>
+
+  <div style="margin-bottom: 1rem;">
+    <button onclick="filterProjects('all')">Show All</button>
+    <button onclick="filterProjects('software')">Software Projects</button>
+    <button onclick="filterProjects('hardware')">Hardware Projects</button>
+  </div>
+
+  <div class="project" data-category="software">
+    <h3>ClassCheck - GPS-Based Attendance Tracker</h3>
+    <p>Developed a mobile-responsive web app for professors to track student attendance using geolocation.</p>
+    <ul>
+      <li>Built with Node.js, SQL, HTML, CSS, and JavaScript</li>
+      <li>Collaborated with a team of 5 to define requirements and present a formal project proposal</li>
+      <li>Created backend logic for location verification and frontend for a user-friendly interface</li>
+    </ul>
+    <img src="images/classcheck.png" alt="Screenshot of ClassCheck project">
+  </div>
+
+  <div class="project" data-category="hardware">
+    <h3>Hardware-Integrated Traffic Light System</h3>
+    <p>Designed a sequential logic circuit using breadboards and ICs to simulate real traffic signal behavior.</p>
+    <ul>
+      <li>Implemented timing and transition logic using digital design principles</li>
+      <li>Tested and refined circuit operation to comply with safety standards</li>
+    </ul>
+    <img src="images/trafficlight.png" alt="Photo of Traffic Light Circuit">
+  </div>
+</section>
+
+<script>
+  function filterProjects(category) {
+    const projects = document.querySelectorAll('.project');
+    projects.forEach(project => {
+      const isMatch = category === 'all' || project.dataset.category === category;
+      project.style.display = isMatch ? 'block' : 'none';
+    });
+  }
+</script>
 
   <section id="skills">
     <h2>Skills</h2>
