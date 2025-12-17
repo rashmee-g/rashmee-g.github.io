@@ -1,165 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rashmee Gade | Portfolio</title>
+  <meta name="description" content="Rashmee Gade — Rutgers ECE + CS minor. Software, web development, and UI/UX portfolio." />
+
   <style>
+    :root{
+      /* Pastel aesthetic */
+      --bg: #fbfbff;
+      --card: rgba(255,255,255,0.78);
+      --card-solid: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+
+      --lav: #cdb4ff;   /* lavender */
+      --sky: #a2d2ff;   /* pastel blue */
+      --mint:#bde0fe;   /* soft minty-blue */
+      --pink:#ffc8dd;   /* pastel pink */
+      --peach:#ffd6a5;  /* peach */
+      --butter:#fdffb6; /* butter */
+
+      --border: rgba(31,41,55,0.10);
+      --shadow: 0 10px 30px rgba(31,41,55,0.08);
+      --shadow-soft: 0 6px 18px rgba(31,41,55,0.06);
+
+      --radius: 18px;
+      --radius-sm: 14px;
+
+      --link: #3b82f6;
+      --focus: rgba(59,130,246,0.25);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-      color: #333;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(205,180,255,0.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(162,210,255,0.35), transparent 55%),
+        radial-gradient(900px 600px at 30% 85%, rgba(255,200,221,0.30), transparent 55%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      min-height: 100vh;
     }
-    header {
-      background-color: #1f2937;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    section {
-      padding: 2rem;
+
+    /* ====== Layout ====== */
+    .container {
+      width: min(1040px, calc(100% - 2rem));
       margin: 0 auto;
-      max-width: 800px;
-      background-color: white;
-      margin-bottom: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    h1, h2, h3 {
-      margin-top: 0;
+
+    /* ====== Top Nav ====== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.60);
+      border-bottom: 1px solid var(--border);
     }
-    .project ul, .skills {
-      list-style-type: disc;
-      padding-left: 1.5rem;
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      gap: 1rem;
     }
-    .skills {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-bubble {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(205,180,255,0.9), rgba(162,210,255,0.85));
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(31,41,55,0.08);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+    }
+    nav a:hover { background: rgba(162,210,255,0.20); color: var(--text); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    a {
-      color: #1d4ed8;
+
+    /* ====== Buttons ====== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       text-decoration: none;
+      cursor: pointer;
+      border: 1px solid rgba(31,41,55,0.10);
+      background: rgba(255,255,255,0.75);
+      color: var(--text);
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: var(--shadow-soft);
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+      white-space: nowrap;
     }
-    a:hover {
-      text-decoration: underline;
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(205,180,255,0.85), rgba(255,200,221,0.75));
+      border: 1px solid rgba(31,41,55,0.08);
     }
-    .resume-btn {
+
+    .btn-ghost {
+      background: transparent;
+      box-shadow: none;
+    }
+    .btn-ghost:hover { background: rgba(205,180,255,0.18); }
+
+    /* ====== Hero ====== */
+    header.hero {
+      padding: 3.2rem 0 2.2rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.7rem;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.35rem 0;
+      font-size: clamp(2rem, 4vw, 2.7rem);
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0.25rem 0 1.1rem;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .pill-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0 1.2rem;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,0.10);
+      background: rgba(255,255,255,0.72);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    .pill.dot::before{
+      content:"";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
       display: inline-block;
-      margin-top: 1rem;
-      padding: 0.6rem 1rem;
-      background-color: #1d4ed8;
-      color: white;
-      border-radius: 5px;
+      background: linear-gradient(135deg, var(--sky), var(--lav));
+      box-shadow: 0 0 0 3px rgba(162,210,255,0.18);
+    }
+
+    .hero-actions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 0.85rem;
+    }
+
+    .quick-card{
+      background: linear-gradient(135deg, rgba(162,210,255,0.22), rgba(255,200,221,0.18));
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .quick-card h3{
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+    }
+
+    .quick-card p{
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .linkline a{
+      color: var(--text);
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700;
     }
-    .project img {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 1rem;
-      border-radius: 6px;
+    .linkline a:hover{ text-decoration: underline; }
+    .linkline span{
+      color: var(--muted);
+      font-weight: 600;
+      margin-left: 0.5rem;
+      font-size: 0.95rem;
     }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #1f2937;
-      color: white;
+
+    /* ====== Sections ====== */
+    section.block {
+      margin: 0 0 1.4rem;
     }
-    .filter-buttons {
+
+    .section-card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      padding: 1.6rem;
+    }
+
+    .section-head{
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
       margin-bottom: 1rem;
     }
-    .filter-buttons button {
-      margin-right: 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: #1d4ed8;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
+
+    h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
     }
-    .filter-buttons button:hover {
-      background-color: #2563eb;
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* ====== Filters ====== */
+    .filters {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      margin: 0.9rem 0 1.1rem;
+    }
+    .filter-btn{
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,0.10);
+      background: rgba(255,255,255,0.72);
+      cursor: pointer;
+      font-weight: 800;
+      color: #374151;
+      transition: transform 120ms ease, background 120ms ease;
+    }
+    .filter-btn:hover{ transform: translateY(-1px); background: rgba(205,180,255,0.20); }
+    .filter-btn.active{
+      background: linear-gradient(135deg, rgba(205,180,255,0.85), rgba(162,210,255,0.65));
+      border-color: rgba(31,41,55,0.10);
+    }
+
+    /* ====== Project Cards ====== */
+    .projects-grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .project{
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .project:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    .project-cover{
+      height: 170px;
+      background:
+        radial-gradient(400px 200px at 20% 30%, rgba(255,200,221,0.70), transparent 55%),
+        radial-gradient(450px 220px at 80% 20%, rgba(162,210,255,0.75), transparent 55%),
+        linear-gradient(135deg, rgba(205,180,255,0.60), rgba(255,214,165,0.55));
+      border-bottom: 1px solid rgba(31,41,55,0.08);
+      position: relative;
+    }
+
+    /* If you have screenshots, replace the cover with an image */
+    .project-cover img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-body{
+      padding: 1.15rem 1.15rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex: 1;
+    }
+
+    .project-title{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .project h3{
+      margin: 0;
+      font-size: 1.07rem;
+      letter-spacing: -0.01em;
+    }
+
+    .meta{
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .project p{
+      margin: 0;
+      color: #4b5563;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .tags{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    .tag{
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(162,210,255,0.18);
+      border: 1px solid rgba(31,41,55,0.08);
+      font-weight: 800;
+      font-size: 0.83rem;
+      color: #334155;
+    }
+    .tag.pink{ background: rgba(255,200,221,0.25); }
+    .tag.lav{ background: rgba(205,180,255,0.20); }
+    .tag.peach{ background: rgba(255,214,165,0.25); }
+
+    .project ul{
+      margin: 0.25rem 0 0;
+      padding-left: 1.1rem;
+      color: #374151;
+      font-weight: 650;
+      line-height: 1.55;
+    }
+
+    .project-actions{
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      padding-top: 0.6rem;
+    }
+
+    /* ====== Skills ====== */
+    .skills-grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.75rem;
+    }
+
+    .skill-card{
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .skill-card h3{
+      margin: 0 0 0.35rem;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .skill-card p{
+      margin: 0;
+      color: var(--muted);
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    /* ====== Footer ====== */
+    footer{
+      padding: 2.3rem 0 2.6rem;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 650;
+    }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 860px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .projects-grid{ grid-template-columns: 1fr; }
+      .skills-grid{ grid-template-columns: 1fr; }
+      nav { display: none; } /* keeps it clean on mobile */
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Rashmee Gade</h1>
-    <p>Electrical & Computer Engineering Student at Rutgers University | Web Development & Embedded Systems Enthusiast</p>
-    <a class="resume-btn" href="resume.pdf" download>Download Resume (PDF)</a>
+
+  <!-- Sticky Top Bar -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-bubble" aria-hidden="true"></span>
+        <span>Rashmee Gade</span>
+      </a>
+
+      <nav aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-right">
+        <a class="btn btn-ghost" href="https://github.com/rashmee-g" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a class="btn btn-primary" href="resume.pdf" download>Download Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <header id="top" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-card">
+        <h1>Hi, I’m Rashmee ✨</h1>
+        <p class="subtitle">
+          Rutgers <b>Electrical & Computer Engineering</b> (CS minor). I like building
+          <b>web/mobile apps</b> and designing <b>simple, user-friendly interfaces</b>.
+        </p>
+
+        <div class="pill-row" aria-label="Highlights">
+          <span class="pill dot">Web Dev</span>
+          <span class="pill dot">UI/UX</span>
+          <span class="pill dot">Full-Stack</span>
+          <span class="pill dot">ECE Background</span>
+        </div>
+
+        <p class="subtitle" style="margin-top:0;">
+          Currently working on an <b>AI-powered public speaking coach</b> that combines
+          computer vision, audio analysis, and NLP.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn" href="#contact">Contact Me</a>
+        </div>
+      </div>
+
+      <aside class="quick-card">
+        <div>
+          <h3>Quick Links</h3>
+          <p>Find my work, code, and contact info here.</p>
+
+          <div class="links">
+            <div class="linkline">
+              <a href="mailto:rrg91@scarletmail.rutgers.edu">rrg91@scarletmail.rutgers.edu</a>
+              <span>Email</span>
+            </div>
+            <div class="linkline">
+              <a href="https://github.com/rashmee-g" target="_blank" rel="noreferrer">github.com/rashmee-g</a>
+              <span>GitHub</span>
+            </div>
+            <div class="linkline">
+              <a href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank" rel="noreferrer">linkedin.com/in/rashmee-gade-3446b0289</a>
+              <span>LinkedIn</span>
+            </div>
+          </div>
+        </div>
+
+        <a class="btn btn-primary" href="resume.pdf" download>Download Resume (PDF)</a>
+      </aside>
+    </div>
   </header>
 
-  <section id="projects">
-    <h2>Projects</h2>
+  <!-- Projects -->
+  <section id="projects" class="block">
+    <div class="container section-card">
+      <div class="section-head">
+        <div>
+          <h2>Projects</h2>
+          <p class="hint">Filter by type — software, UI/UX, or hardware.</p>
+        </div>
+      </div>
 
-    <div class="filter-buttons">
-      <button onclick="filterProjects('all')">Show All</button>
-      <button onclick="filterProjects('software')">Software Projects</button>
-      <button onclick="filterProjects('hardware')">Hardware Projects</button>
-    </div>
+      <div class="filters" role="group" aria-label="Project filters">
+        <button class="filter-btn active" onclick="filterProjects('all', this)">All</button>
+        <button class="filter-btn" onclick="filterProjects('software', this)">Software</button>
+        <button class="filter-btn" onclick="filterProjects('uiux', this)">UI/UX</button>
+        <button class="filter-btn" onclick="filterProjects('hardware', this)">Hardware</button>
+      </div>
 
-    <div class="project" data-category="software">
-      <h3>ClassCheck - GPS-Based Attendance Tracker</h3>
-      <p>Developed a mobile-responsive web app for professors to track student attendance using geolocation.</p>
-      <ul>
-        <li>Built with Node.js, SQL, HTML, CSS, and JavaScript</li>
-        <li>Collaborated with a team of 5 to define requirements and present a formal project proposal</li>
-        <li>Created backend logic for location verification and frontend for a user-friendly interface</li>
-      </ul>
-      <img src="images/ClassCheck.png" alt="Screenshot of ClassCheck project">
-    </div>
+      <div class="projects-grid">
 
-    <div class="project" data-category="hardware">
-      <h3>Hardware-Integrated Traffic Light System</h3>
-      <p>Designed a sequential logic circuit using breadboards and ICs to simulate real traffic signal behavior.</p>
-      <ul>
-        <li>Implemented timing and transition logic using digital design principles</li>
-        <li>Tested and refined circuit operation to comply with safety standards</li>
-      </ul>
-      <img src="images/FinalCircuitTrafficLight.png" alt="Photo of Traffic Light Circuit">
+        <!-- AI Coach -->
+        <article class="project" data-category="software">
+          <div class="project-cover">
+            <!-- Optional: add a screenshot -->
+            <!-- <img src="images/ai-coach.png" alt="AI Public Speaking Coach screenshot"> -->
+          </div>
+
+          <div class="project-body">
+            <div class="project-title">
+              <h3>AI-Powered Public Speaking Coach</h3>
+              <div class="meta">Fall 2025 – Present</div>
+            </div>
+
+            <p>
+              Mobile app that gives real-time + post-session feedback on speech delivery,
+              body language, facial expressions, and content relevance.
+            </p>
+
+            <div class="tags">
+              <span class="tag lav">React Native</span>
+              <span class="tag">Node.js</span>
+              <span class="tag peach">Python</span>
+              <span class="tag pink">NLP</span>
+              <span class="tag">Computer Vision</span>
+            </div>
+
+            <ul>
+              <li>Frontend lead: user flows, feedback visuals, progress tracking</li>
+              <li>Multimodal tools: MMPose, DeepFace, Librosa, Speech-to-Text, Sentence-BERT</li>
+              <li>5-person capstone team; milestone reviews + testing</li>
+            </ul>
+
+            <div class="project-actions">
+              <!-- Add a GitHub link if public -->
+              <!-- <a class="btn" href="#" target="_blank" rel="noreferrer">GitHub</a> -->
+              <a class="btn btn-ghost" href="#contact">Ask for demo</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- SyncTime -->
+        <article class="project" data-category="uiux">
+          <div class="project-cover">
+            <!-- Optional: add a screenshot -->
+            <!-- <img src="images/synctime.png" alt="SyncTime prototype screenshot"> -->
+          </div>
+
+          <div class="project-body">
+            <div class="project-title">
+              <h3>SyncTime (BluePrint) — Google Calendar Social Extension</h3>
+              <div class="meta">Fall 2025</div>
+            </div>
+
+            <p>
+              UI/UX project to simplify shared scheduling and help groups find mutual availability
+              without back-and-forth texting.
+            </p>
+
+            <div class="tags">
+              <span class="tag lav">Figma</span>
+              <span class="tag pink">User Research</span>
+              <span class="tag">Prototyping</span>
+              <span class="tag peach">Usability</span>
+            </div>
+
+            <ul>
+              <li>Conducted research with <b>40+ survey responses</b> to identify key pain points</li>
+              <li>Designed <b>10+ wireframes/prototypes</b> through iterative feedback cycles</li>
+              <li>Presented final design + rationale to peers and mentors</li>
+            </ul>
+
+            <div class="project-actions">
+              <!-- If you have a Figma link, drop it in here -->
+              <!-- <a class="btn" href="YOUR_FIGMA_LINK" target="_blank" rel="noreferrer">Figma Prototype</a> -->
+              <a class="btn btn-ghost" href="#contact">Request case study</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ClassCheck -->
+        <article class="project" data-category="software">
+          <div class="project-cover">
+            <!-- Replace with your screenshot -->
+            <img src="images/ClassCheck.png" alt="Screenshot of ClassCheck project">
+          </div>
+
+          <div class="project-body">
+            <div class="project-title">
+              <h3>ClassCheck — Geolocation Attendance System</h3>
+              <div class="meta">Spring 2025</div>
+            </div>
+
+            <p>
+              Full-stack attendance tracking system for university classrooms using geolocation
+              and role-based dashboards for students and professors.
+            </p>
+
+            <div class="tags">
+              <span class="tag">Node.js</span>
+              <span class="tag lav">Firebase</span>
+              <span class="tag pink">Auth0 MFA</span>
+              <span class="tag">REST APIs</span>
+            </div>
+
+            <ul>
+              <li>Built <b>10+ REST APIs</b> for attendance logging, reports, exceptions, and schedules</li>
+              <li>Firebase Realtime Database + role-based access; secure authentication via Auth0</li>
+              <li>Team project (4–5 people): requirements, milestones, proposal + demo</li>
+            </ul>
+
+            <div class="project-actions">
+              <a class="btn" href="https://github.com/Absa1072/ClassCheck" target="_blank" rel="noreferrer">GitHub Repo</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Hardware Project -->
+        <article class="project" data-category="hardware">
+          <div class="project-cover">
+            <img src="images/FinalCircuitTrafficLight.png" alt="Photo of Traffic Light Circuit">
+          </div>
+
+          <div class="project-body">
+            <div class="project-title">
+              <h3>Hardware-Integrated Traffic Light System</h3>
+              <div class="meta">Hardware</div>
+            </div>
+
+            <p>
+              Sequential logic circuit simulating real traffic signal behavior using digital design fundamentals.
+            </p>
+
+            <div class="tags">
+              <span class="tag peach">Circuit Design</span>
+              <span class="tag">Digital Logic</span>
+              <span class="tag lav">Embedded</span>
+            </div>
+
+            <ul>
+              <li>Implemented timing + transition logic to simulate signal cycles</li>
+              <li>Tested and refined behavior for consistent, reliable operation</li>
+            </ul>
+
+            <div class="project-actions">
+              <a class="btn btn-ghost" href="#contact">Ask for details</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
     </div>
   </section>
 
-  <section id="skills">
-    <h2>Skills</h2>
-    <ul class="skills">
-      <li>JavaScript</li>
-      <li>Python</li>
-      <li>MATLAB</li>
-      <li>HTML & CSS</li>
-      <li>SQL</li>
-      <li>Node.js & Express.js</li>
-      <li>TinkerCAD</li>
-      <li>Embedded Systems</li>
-      <li>Circuit Design</li>
-      <li>REST APIs</li>
-      <li>Web Development</li>
-      <li>Terminal/CLI</li>
-    </ul>
+  <!-- Skills -->
+  <section id="skills" class="block">
+    <div class="container section-card">
+      <div class="section-head">
+        <div>
+          <h2>Skills</h2>
+          <p class="hint">Focused on software, web/mobile development, and UI/UX.</p>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Programming & Tools</h3>
+          <p>JavaScript, Python, HTML/CSS, SQL, Node.js, React Native, Firebase, Figma</p>
+        </div>
+        <div class="skill-card">
+          <h3>Technical</h3>
+          <p>Web Development, UI/UX Design, Prototyping, REST APIs, Database Design (NoSQL), User Research</p>
+        </div>
+        <div class="skill-card">
+          <h3>ECE Background</h3>
+          <p>Embedded Systems, Circuit Design, Digital Logic (Quartus/TinkerCAD experience)</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:rrg91@scarletmail.rutgers.edu">rrg91@scarletmail.rutgers.edu</a></p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank">linkedin.com/in/rashmee-gade-3446b0289</a></p>
-    <p>GitHub: <a href="https://github.com/rashmee-g" target="_blank">github.com/rashmee-g</a></p>
+  <!-- Contact -->
+  <section id="contact" class="block">
+    <div class="container section-card">
+      <div class="section-head">
+        <div>
+          <h2>Contact</h2>
+          <p class="hint">Open to internships + collaborative projects.</p>
+        </div>
+      </div>
+
+      <p style="margin:0; color:#4b5563; font-weight:650; line-height:1.6;">
+        Email: <a href="mailto:rrg91@scarletmail.rutgers.edu" style="color:var(--link); font-weight:800; text-decoration:none;">rrg91@scarletmail.rutgers.edu</a><br />
+        LinkedIn: <a href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank" rel="noreferrer" style="color:var(--link); font-weight:800; text-decoration:none;">linkedin.com/in/rashmee-gade-3446b0289</a><br />
+        GitHub: <a href="https://github.com/rashmee-g" target="_blank" rel="noreferrer" style="color:var(--link); font-weight:800; text-decoration:none;">github.com/rashmee-g</a>
+      </p>
+    </div>
   </section>
 
   <footer>
-    <p>&copy; 2025 Rashmee Gade</p>
+    <div class="container">
+      <div>&copy; <span id="year"></span> Rashmee Gade • Pastel-coded with ☁️</div>
+    </div>
   </footer>
 
   <script>
-    function filterProjects(category) {
-      const projects = document.querySelectorAll('.project');
-      projects.forEach(project => {
-        const match = category === 'all' || project.dataset.category === category;
-        project.style.display = match ? 'block' : 'none';
+    // Set year automatically
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Filter logic
+    function filterProjects(category, btn) {
+      const projects = document.querySelectorAll(".project");
+      projects.forEach(p => {
+        const match = category === "all" || p.dataset.category === category;
+        p.style.display = match ? "flex" : "none";
       });
+
+      // button active state
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
     }
   </script>
 </body>
