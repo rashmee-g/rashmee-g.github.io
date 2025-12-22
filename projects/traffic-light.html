@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traffic Light System | Rashmee Gade</title>
+  <meta name="description" content="Hardware-Integrated Traffic Light System case study — sequential logic circuit simulating real traffic signal timing." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fbfbff;
+      --card:rgba(255,255,255,0.78);
+      --text:#1f2937;
+      --muted:#6b7280;
+
+      --lav:#cdb4ff;
+      --sky:#a2d2ff;
+      --pink:#ffc8dd;
+      --peach:#ffd6a5;
+
+      --border:rgba(31,41,55,0.10);
+      --shadow:0 10px 30px rgba(31,41,55,0.08);
+      --shadow-soft:0 6px 18px rgba(31,41,55,0.06);
+
+      --radius:18px;
+      --radius-sm:14px;
+
+      --link:#3b82f6;
+      --focus:rgba(59,130,246,0.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(205,180,255,0.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(162,210,255,0.35), transparent 55%),
+        radial-gradient(900px 600px at 30% 85%, rgba(255,200,221,0.30), transparent 55%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      min-height:100vh;
+    }
+
+    h1,h2,h3{ font-family:"Fraunces",serif; margin:0; }
+    p{ margin:0; line-height:1.75; }
+    a{ color:var(--link); text-decoration:none; font-weight:800; }
+    a:hover{ text-decoration:underline; }
+
+    .container{
+      width:min(980px, calc(100% - 2rem));
+      margin:0 auto;
+      padding: 1.6rem 0 2.4rem;
+    }
+
+    /* Top row */
+    .toprow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.5rem;
+      padding:0.72rem 1rem;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,0.10);
+      background:rgba(255,255,255,0.75);
+      box-shadow:var(--shadow-soft);
+      font-weight:800;
+      color:var(--text);
+      text-decoration:none;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:var(--shadow); }
+    .btn:focus{ outline:3px solid var(--focus); outline-offset:2px; }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(205,180,255,0.85), rgba(255,200,221,0.75));
+      border:1px solid rgba(31,41,55,0.08);
+    }
+    .btn-ghost{
+      background:transparent;
+      box-shadow:none;
+    }
+    .btn-ghost:hover{ background:rgba(205,180,255,0.18); }
+
+    /* Cards / sections */
+    .hero{
+      border-radius:var(--radius);
+      background:linear-gradient(135deg, rgba(162,210,255,0.22), rgba(255,200,221,0.18));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      padding: 1.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      padding:1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .muted{ color:var(--muted); font-weight:650; }
+    .small{ font-size:0.95rem; }
+    .lead{ font-size:1.05rem; }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem;
+      margin-top: 0.9rem;
+    }
+    .chip{
+      padding:0.35rem 0.65rem;
+      border-radius:999px;
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      font-weight:800;
+      font-size:0.85rem;
+      color:#334155;
+    }
+    .chip.lav{ background:rgba(205,180,255,0.20); }
+    .chip.pink{ background:rgba(255,200,221,0.25); }
+    .chip.peach{ background:rgba(255,214,165,0.25); }
+    .chip.sky{ background:rgba(162,210,255,0.18); }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.6rem;
+      margin-top: 1rem;
+    }
+
+    /* Two-column info block */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+
+    .mini{
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      box-shadow: var(--shadow-soft);
+    }
+    .mini h3{
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+
+    /* Lists */
+    ul{
+      margin: 0.55rem 0 0;
+      padding-left: 1.2rem;
+      color:#374151;
+      font-weight:650;
+      line-height:1.65;
+    }
+
+    /* Image blocks */
+    .img-wrap{
+      margin-top: 0.9rem;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,0.75);
+    }
+    .img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .img-cap{
+      padding: 0.75rem 0.95rem;
+      border-top:1px solid rgba(31,41,55,0.08);
+      font-weight:800;
+      color:#374151;
+      font-size:0.95rem;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+
+    footer{
+      text-align:center;
+      padding: 1.25rem 0 0.5rem;
+      color: var(--muted);
+      font-weight:650;
+    }
+
+    @media (max-width: 860px){
+      .grid-2{ grid-template-columns: 1fr; }
+      .gallery{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Top row -->
+    <div class="toprow">
+      <a class="btn" href="../index.html">← Back To Home</a>
+      <div class="muted small">Traffic Light System • Rutgers University • Fall 2023</div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.6rem); letter-spacing:-0.03em;">Hardware-Integrated Traffic Light System</h1>
+      <p class="muted lead" style="margin-top:0.4rem;">
+        A sequential logic circuit that simulates real traffic signal timing and transitions, designed and validated through iterative debugging.
+      </p>
+
+      <div class="chips" aria-label="Key skills and tools">
+        <span class="chip peach">Sequential Logic</span>
+        <span class="chip sky">Timing Design</span>
+        <span class="chip lav">Hardware Debugging</span>
+        <span class="chip pink">Digital Circuits</span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#build">See The Build</a>
+        <a class="btn" href="#process">Design Process</a>
+        <a class="btn btn-ghost" href="#reflection">Reflection</a>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>Goal</h3>
+          <p class="muted">
+            Create a reliable traffic light cycle (green → yellow → red) with correct timing behavior and clean state transitions.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>What I Focused On</h3>
+          <p class="muted">
+            Translating the state sequence into hardware logic, validating timing, and debugging until transitions behaved consistently.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section class="card" id="overview">
+      <h2>Overview</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        This project models a real-world control system using a finite set of states and timed transitions.
+        The core challenge was ensuring the circuit consistently followed the intended sequence and didn’t glitch during transitions.
+      </p>
+    </section>
+
+    <!-- WHAT I BUILT -->
+    <section class="card" id="build">
+      <h2>What I Built</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        The final system runs a complete cycle and drives the correct light outputs for each state.
+      </p>
+
+      <ul>
+        <li>Designed the state sequence and output behavior for each light phase.</li>
+        <li>Implemented timing + transitions using sequential logic and validated signal stability.</li>
+        <li>Debugged issues like incorrect wiring, inconsistent state changes, and timing drift until the cycle was reliable.</li>
+      </ul>
+
+      <div class="img-wrap">
+        <img src="../images/FinalCircuitTrafficLight.png" alt="Final hardware build of the traffic light system">
+        <div class="img-cap">Final hardware build: tested end-to-end to confirm consistent light transitions.</div>
+      </div>
+
+      <div class="img-wrap" onerror="this.style.display='none';">
+        <img src="../images/TrafficLight.png" alt="Traffic light system overall view" onerror="this.closest('.img-wrap').style.display='none';">
+        <div class="img-cap">Overall setup during testing.</div>
+      </div>
+    </section>
+
+    <!-- DESIGN PROCESS -->
+    <section class="card" id="process">
+      <h2>Design Process</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        I approached this like a hardware state machine: define states, map outputs, then validate transitions under real timing conditions.
+      </p>
+
+      <div class="grid-2" style="margin-top:0.9rem;">
+        <div class="mini">
+          <h3>1) Define states + outputs</h3>
+          <ul>
+            <li>Set states for each phase (ex: Green, Yellow, Red)</li>
+            <li>Assigned outputs to ensure only the intended light is active per state</li>
+            <li>Verified outputs don’t conflict during transitions</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>2) Validate timing + transitions</h3>
+          <ul>
+            <li>Tested that each phase holds for the correct duration</li>
+            <li>Checked transitions for stability (no flicker / unexpected states)</li>
+            <li>Iterated until behavior matched the intended cycle</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCHEMATIC / DIAGRAMS -->
+    <section class="card" id="schematic">
+      <h2>Schematic</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        This section highlights how the system was wired and reasoned about during development.
+      </p>
+
+            <div class="img-wrap">
+        <img src="../images/TinkerCADSchematicTrafficLight.png"
+            alt="TinkerCAD schematic of the traffic light circuit"
+            onerror="this.closest('.img-wrap').style.display='none';">
+        <div class="img-cap">
+            TinkerCAD schematic illustrating the wiring and logic used to implement
+            the traffic light state transitions.
+        </div>
+        </div>
+
+    </section>
+
+    <!-- TOOLS / CONCEPTS -->
+    <section class="card" id="tools">
+      <h2>Tools / Concepts</h2>
+      <div class="grid-2" style="margin-top:0.9rem;">
+        <div class="mini">
+          <h3>Concepts</h3>
+          <ul>
+            <li>Sequential logic + state-based control</li>
+            <li>Timing behavior + transition validation</li>
+            <li>Hardware troubleshooting and iteration</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Skills Displayed</h3>
+          <ul>
+            <li>Turning a real-world behavior into a state machine</li>
+            <li>Testing + debugging in hardware constraints</li>
+            <li>Documenting work clearly for others to review</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="card" id="reflection">
+      <h2>Reflection & Next Steps</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        If I expanded this project, I’d add pedestrian timing, an “all-red” safety buffer, and configurable cycle durations (switchable via inputs).
+      </p>
+
+      <div class="hero-actions" style="margin-top:1rem;">
+        <a class="btn" href="#top">Back To Top ↑</a>
+      </div>
+    </section>
+
+    <footer>
+      <div>&copy; <span id="year"></span> Rashmee Gade • Traffic Light System</div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
