@@ -80,9 +80,18 @@ I’m an **ECE major and CS minor** interested in:
 
 ---
 
-## Contact
+## Opportunities
 
-Feel free to reach out — I’m always open to internships, collaborations, and feedback.
+I’m currently seeking **internships, entry-level roles, and project-based opportunities** in:
+- Software / Web Development
+- UI/UX Design
+- Full-stack or frontend-focused roles
+
+I’m especially interested in teams that value thoughtful design, user-centered problem solving, and clean, maintainable systems.
+
+---
+
+## Contact
 
 - Email: rrg91@scarletmail.rutgers.edu  
 - LinkedIn: https://www.linkedin.com/in/rashmee-gade-3446b0289/  
