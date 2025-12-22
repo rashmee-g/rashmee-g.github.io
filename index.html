@@ -6,6 +6,11 @@
   <title>Rashmee Gade | Portfolio</title>
   <meta name="description" content="Rashmee Gade — Rutgers ECE + CS minor. Software, web development, and UI/UX portfolio." />
 
+  <!-- Aesthetic fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root{
       /* Pastel aesthetic */
@@ -37,7 +42,7 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
         radial-gradient(1200px 600px at 10% 0%, rgba(205,180,255,0.35), transparent 55%),
@@ -46,6 +51,9 @@
         linear-gradient(180deg, #ffffff, var(--bg));
       min-height: 100vh;
     }
+
+    h1, h2, h3 { font-family: "Fraunces", serif; }
+    p { line-height: 1.65; }
 
     /* ====== Layout ====== */
     .container {
@@ -97,6 +105,7 @@
       font-size: 0.95rem;
       padding: 0.55rem 0.75rem;
       border-radius: 999px;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
     nav a:hover { background: rgba(162,210,255,0.20); color: var(--text); }
 
@@ -125,6 +134,7 @@
       box-shadow: var(--shadow-soft);
       transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
       white-space: nowrap;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
     .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
     .btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -171,7 +181,8 @@
       margin: 0.25rem 0 1.1rem;
       color: var(--muted);
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.6;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .pill-row{
@@ -192,6 +203,7 @@
       font-weight: 700;
       font-size: 0.9rem;
       color: #374151;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .pill.dot::before{
@@ -232,8 +244,9 @@
     .quick-card p{
       margin: 0.35rem 0 0;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.6;
       font-weight: 600;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .links {
@@ -247,6 +260,7 @@
       color: var(--text);
       text-decoration: none;
       font-weight: 700;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
     .linkline a:hover{ text-decoration: underline; }
     .linkline span{
@@ -254,6 +268,7 @@
       font-weight: 600;
       margin-left: 0.5rem;
       font-size: 0.95rem;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     /* ====== Sections ====== */
@@ -289,6 +304,7 @@
       color: var(--muted);
       font-weight: 600;
       font-size: 0.95rem;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     /* ====== Filters ====== */
@@ -307,6 +323,7 @@
       font-weight: 800;
       color: #374151;
       transition: transform 120ms ease, background 120ms ease;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
     .filter-btn:hover{ transform: translateY(-1px); background: rgba(205,180,255,0.20); }
     .filter-btn.active{
@@ -343,7 +360,6 @@
       position: relative;
     }
 
-    /* If you have screenshots, replace the cover with an image */
     .project-cover img{
       width: 100%;
       height: 100%;
@@ -378,13 +394,15 @@
       font-weight: 700;
       font-size: 0.9rem;
       white-space: nowrap;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .project p{
       margin: 0;
       color: #4b5563;
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.6;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .tags{
@@ -401,6 +419,7 @@
       font-weight: 800;
       font-size: 0.83rem;
       color: #334155;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
     .tag.pink{ background: rgba(255,200,221,0.25); }
     .tag.lav{ background: rgba(205,180,255,0.20); }
@@ -412,6 +431,7 @@
       color: #374151;
       font-weight: 650;
       line-height: 1.55;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     .project-actions{
@@ -449,6 +469,7 @@
       color: var(--muted);
       font-weight: 650;
       line-height: 1.5;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     /* ====== Footer ====== */
@@ -457,6 +478,7 @@
       color: var(--muted);
       text-align: center;
       font-weight: 650;
+      font-family: "Plus Jakarta Sans", sans-serif;
     }
 
     /* ====== Responsive ====== */
@@ -488,7 +510,7 @@
       <div class="nav-right">
         <a class="btn btn-ghost" href="https://github.com/rashmee-g" target="_blank" rel="noreferrer">GitHub</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a class="btn btn-primary" href="resume.pdf" download>Download Resume</a>
+        <a class="btn btn-primary" href="images/Rashmee-Resume-New-Dec-2025-copy.pdf" download>Download Resume</a>
       </div>
     </div>
   </div>
@@ -497,10 +519,10 @@
   <header id="top" class="hero">
     <div class="container hero-grid">
       <div class="hero-card">
-        <h1>Hi, I’m Rashmee ✨</h1>
+        <h1>Hi, I’m Rashmee!</h1>
         <p class="subtitle">
-          Rutgers <b>Electrical & Computer Engineering</b> (CS minor). I like building
-          <b>web/mobile apps</b> and designing <b>simple, user-friendly interfaces</b>.
+          I’m currently a Rutgers <b>ECE</b> student (CS minor) who enjoys building <b>web/mobile apps</b> and
+          designing <b>clean, easy-to-use interfaces</b>.
         </p>
 
         <div class="pill-row" aria-label="Highlights">
@@ -511,8 +533,7 @@
         </div>
 
         <p class="subtitle" style="margin-top:0;">
-          Currently working on an <b>AI-powered public speaking coach</b> that combines
-          computer vision, audio analysis, and NLP.
+          I’m currently working on a public speaking coach app that gives you practical feedback as you practice.
         </p>
 
         <div class="hero-actions">
@@ -542,7 +563,7 @@
           </div>
         </div>
 
-        <a class="btn btn-primary" href="resume.pdf" download>Download Resume (PDF)</a>
+        <a class="btn btn-primary" href="images/Rashmee-Resume-New-Dec-2025-copy.pdf" download>Download Resume (PDF)</a>
       </aside>
     </div>
   </header>
@@ -569,7 +590,6 @@
         <!-- AI Coach -->
         <article class="project" data-category="software">
           <div class="project-cover">
-            <!-- Optional: add a screenshot -->
             <!-- <img src="images/ai-coach.png" alt="AI Public Speaking Coach screenshot"> -->
           </div>
 
@@ -580,8 +600,7 @@
             </div>
 
             <p>
-              Mobile app that gives real-time + post-session feedback on speech delivery,
-              body language, facial expressions, and content relevance.
+              A mobile app that helps you practice speeches by giving quick, helpful feedback during and after a session.
             </p>
 
             <div class="tags">
@@ -599,9 +618,7 @@
             </ul>
 
             <div class="project-actions">
-              <!-- Add a GitHub link if public -->
-              <!-- <a class="btn" href="#" target="_blank" rel="noreferrer">GitHub</a> -->
-              <a class="btn btn-ghost" href="#contact">Ask for demo</a>
+              <a class="btn" href="projects/ai-coach.html">View Details</a>
             </div>
           </div>
         </article>
@@ -609,8 +626,7 @@
         <!-- SyncTime -->
         <article class="project" data-category="uiux">
           <div class="project-cover">
-            <!-- Optional: add a screenshot -->
-            <!-- <img src="images/synctime.png" alt="SyncTime prototype screenshot"> -->
+            <img src="images/synctime.png" alt="SyncTime prototype screenshot"> 
           </div>
 
           <div class="project-body">
@@ -620,8 +636,7 @@
             </div>
 
             <p>
-              UI/UX project to simplify shared scheduling and help groups find mutual availability
-              without back-and-forth texting.
+              A UI/UX concept that makes it easier for friends or teams to find a time that works without the endless texting.
             </p>
 
             <div class="tags">
@@ -638,9 +653,7 @@
             </ul>
 
             <div class="project-actions">
-              <!-- If you have a Figma link, drop it in here -->
-              <!-- <a class="btn" href="YOUR_FIGMA_LINK" target="_blank" rel="noreferrer">Figma Prototype</a> -->
-              <a class="btn btn-ghost" href="#contact">Request case study</a>
+              <a class="btn" href="projects/synctime.html">View Details</a>
             </div>
           </div>
         </article>
@@ -648,7 +661,6 @@
         <!-- ClassCheck -->
         <article class="project" data-category="software">
           <div class="project-cover">
-            <!-- Replace with your screenshot -->
             <img src="images/ClassCheck.png" alt="Screenshot of ClassCheck project">
           </div>
 
@@ -659,8 +671,7 @@
             </div>
 
             <p>
-              Full-stack attendance tracking system for university classrooms using geolocation
-              and role-based dashboards for students and professors.
+              A geolocation-based attendance app built for classrooms, with separate views for students, professors, and admins.
             </p>
 
             <div class="tags">
@@ -673,11 +684,12 @@
             <ul>
               <li>Built <b>10+ REST APIs</b> for attendance logging, reports, exceptions, and schedules</li>
               <li>Firebase Realtime Database + role-based access; secure authentication via Auth0</li>
-              <li>Team project (4–5 people): requirements, milestones, proposal + demo</li>
+              <li>Team project (5 people): requirements, milestones, proposal + demo</li>
             </ul>
 
             <div class="project-actions">
-              <a class="btn" href="https://github.com/Absa1072/ClassCheck" target="_blank" rel="noreferrer">GitHub Repo</a>
+              <a class="btn" href="projects/classcheck.html">View Details</a>
+              <a class="btn btn-ghost" href="https://github.com/Absa1072/ClassCheck" target="_blank" rel="noreferrer">GitHub Repo</a>
             </div>
           </div>
         </article>
@@ -695,7 +707,7 @@
             </div>
 
             <p>
-              Sequential logic circuit simulating real traffic signal behavior using digital design fundamentals.
+              A traffic light circuit project where I built and tested timing logic to simulate real signal behavior.
             </p>
 
             <div class="tags">
@@ -710,7 +722,7 @@
             </ul>
 
             <div class="project-actions">
-              <a class="btn btn-ghost" href="#contact">Ask for details</a>
+              <a class="btn" href="projects/traffic-light.html">View Details</a>
             </div>
           </div>
         </article>
@@ -756,7 +768,7 @@
         </div>
       </div>
 
-      <p style="margin:0; color:#4b5563; font-weight:650; line-height:1.6;">
+      <p style="margin:0; color:#4b5563; font-weight:650; line-height:1.6; font-family:'Plus Jakarta Sans', sans-serif;">
         Email: <a href="mailto:rrg91@scarletmail.rutgers.edu" style="color:var(--link); font-weight:800; text-decoration:none;">rrg91@scarletmail.rutgers.edu</a><br />
         LinkedIn: <a href="https://www.linkedin.com/in/rashmee-gade-3446b0289/" target="_blank" rel="noreferrer" style="color:var(--link); font-weight:800; text-decoration:none;">linkedin.com/in/rashmee-gade-3446b0289</a><br />
         GitHub: <a href="https://github.com/rashmee-g" target="_blank" rel="noreferrer" style="color:var(--link); font-weight:800; text-decoration:none;">github.com/rashmee-g</a>
@@ -766,7 +778,7 @@
 
   <footer>
     <div class="container">
-      <div>&copy; <span id="year"></span> Rashmee Gade • Pastel-coded with ☁️</div>
+      <div>&copy; <span id="year"></span> Rashmee Gade • Portfolio</div>
     </div>
   </footer>
 
