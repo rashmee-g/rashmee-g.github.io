@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassCheck | Case Study — Rashmee Gade</title>
+  <meta name="description" content="ClassCheck case study — geolocation-based attendance tracking system with role-based access and reporting." />
+
+  <!-- Fonts: match SyncTime (Fraunces + Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fbfbff;
+      --card:rgba(255,255,255,0.78);
+      --text:#1f2937;
+      --muted:#6b7280;
+
+      --lav:#cdb4ff;
+      --sky:#a2d2ff;
+      --pink:#ffc8dd;
+      --peach:#ffd6a5;
+      --butter:#fdffb6;
+
+      --border:rgba(31,41,55,0.10);
+      --shadow:0 10px 30px rgba(31,41,55,0.08);
+      --shadow-soft:0 6px 18px rgba(31,41,55,0.06);
+
+      --radius:18px;
+      --radius-sm:14px;
+
+      --link:#3b82f6;
+      --focus:rgba(59,130,246,0.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(205,180,255,0.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(162,210,255,0.35), transparent 55%),
+        radial-gradient(900px 600px at 30% 85%, rgba(255,200,221,0.30), transparent 55%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      min-height:100vh;
+    }
+
+    h1,h2,h3{ font-family:"Fraunces",serif; margin:0; }
+    p{ margin:0; line-height:1.75; }
+    a{ color:var(--link); text-decoration:none; font-weight:800; }
+    a:hover{ text-decoration:underline; }
+
+    .container{
+      width:min(980px, calc(100% - 2rem));
+      margin:0 auto;
+      padding: 1.6rem 0 2.4rem;
+    }
+
+    /* Top row (SyncTime style) */
+    .toprow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.5rem;
+      padding:0.72rem 1rem;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,0.10);
+      background:rgba(255,255,255,0.75);
+      box-shadow:var(--shadow-soft);
+      font-weight:800;
+      color:var(--text);
+      text-decoration:none;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:var(--shadow); }
+    .btn:focus{ outline:3px solid var(--focus); outline-offset:2px; }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(205,180,255,0.85), rgba(255,200,221,0.75));
+      border:1px solid rgba(31,41,55,0.08);
+    }
+    .btn-ghost{
+      background:transparent;
+      box-shadow:none;
+    }
+    .btn-ghost:hover{ background:rgba(205,180,255,0.18); }
+
+    /* Cards / sections (SyncTime style) */
+    .hero{
+      border-radius:var(--radius);
+      background:linear-gradient(135deg, rgba(162,210,255,0.22), rgba(255,200,221,0.18));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      padding: 1.7rem;
+      margin-bottom: 1rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      padding:1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .muted{ color:var(--muted); font-weight:650; }
+    .small{ font-size:0.95rem; }
+    .lead{ font-size:1.05rem; }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem;
+      margin-top: 0.9rem;
+    }
+    .chip{
+      padding:0.35rem 0.65rem;
+      border-radius:999px;
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      font-weight:800;
+      font-size:0.85rem;
+      color:#334155;
+    }
+    .chip.lav{ background:rgba(205,180,255,0.20); }
+    .chip.pink{ background:rgba(255,200,221,0.25); }
+    .chip.peach{ background:rgba(255,214,165,0.25); }
+    .chip.sky{ background:rgba(162,210,255,0.18); }
+    .chip.butter{ background:rgba(253,255,182,0.35); }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.6rem;
+      margin-top: 1rem;
+    }
+
+    /* Grids */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+
+    .mini{
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+    }
+    .mini h3{
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .mini p{
+      margin:0;
+      color:var(--muted);
+      font-weight:650;
+      line-height:1.55;
+    }
+
+    ul{
+      margin: 0.55rem 0 0;
+      padding-left: 1.2rem;
+      color:#374151;
+      font-weight:650;
+      line-height:1.65;
+    }
+    .callout{
+      margin-top: 0.9rem;
+      border-radius: var(--radius);
+      border:1px solid rgba(31,41,55,0.10);
+      background: linear-gradient(135deg, rgba(162,210,255,0.20), rgba(255,200,221,0.18));
+      padding: 1rem 1.1rem;
+      box-shadow: var(--shadow-soft);
+    }
+    .callout b{ font-weight:900; }
+
+    /* Media blocks (images) */
+    .media{
+      margin-top: 0.9rem;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,0.75);
+    }
+    .media img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .caption{
+      padding: 0.75rem 0.95rem;
+      border-top:1px solid rgba(31,41,55,0.08);
+      font-weight:800;
+      color:#4b5563;
+      font-size:0.95rem;
+      line-height:1.55;
+    }
+
+    .embed{
+      margin-top: 0.9rem;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,0.75);
+      height: min(80vh, 820px);
+    }
+    .embed iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    footer{
+      text-align:center;
+      padding: 1.25rem 0 0.5rem;
+      color: var(--muted);
+      font-weight:650;
+    }
+
+    @media (max-width: 860px){
+      .grid-2{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .embed{ height: min(70vh, 720px); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Top row -->
+    <div class="toprow">
+      <a class="btn" href="../index.html">← Back To Home</a>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <div class="muted small">ClassCheck • Rutgers University • Spring 2025</div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="overview">
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.6rem); letter-spacing:-0.03em;">ClassCheck</h1>
+      <p class="muted lead" style="margin-top:0.4rem;">
+        A full-stack, geolocation-based attendance tracking system for university classrooms with role-based dashboards
+        for <b>students</b> and <b>professors</b>, plus attendance reports and an exception/appeal workflow.
+      </p>
+
+      <div class="chips" aria-label="Tech stack">
+        <span class="chip">Node.js</span>
+        <span class="chip lav">Firebase Realtime DB</span>
+        <span class="chip pink">Auth0 (MFA)</span>
+        <span class="chip peach">Google Maps Geolocation</span>
+        <span class="chip">REST APIs</span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#solution">Jump to Solution</a>
+        <a class="btn btn-primary" href="https://github.com/Absa1072/ClassCheck" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn" href="#report">View Report</a>
+      </div>
+
+      <div class="grid-3">
+        <div class="mini">
+          <h3>Context</h3>
+          <p>
+            University attendance is messy when it relies on manual roll calls, late arrivals, and unclear exceptions.
+            ClassCheck helps instructors track attendance using real-time location verification.
+          </p>
+        </div>
+
+        <div class="mini">
+          <h3>Users</h3>
+          <p>
+            Students mark attendance and request exceptions. Professors manage rosters, locations, and generate reports
+            for specific dates.
+          </p>
+        </div>
+
+        <div class="mini">
+          <h3>My Contributions</h3>
+          <p>
+            I led the <b>attendance reporting + exception workflow</b> and helped define data/schema and access control
+            patterns with the team.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <b>Team Setup:</b> built collaboratively in a small team, with clearly owned use cases (ex: reports were assigned to me).
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="card">
+      <h2>The Problem</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        The pain points we designed around:
+      </p>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>Instructors need reliable records</h3>
+          <p>
+            Attendance data should be fast to collect and easy to audit. If students are late or absent, instructors
+            need consistent rules and clean reporting.
+          </p>
+          <ul>
+            <li>Reduce “who was here?” ambiguity</li>
+            <li>Make reports easy to generate per day / per student</li>
+            <li>Keep data protected (role-based)</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Students need a fair exception process</h3>
+          <p>
+            When location-based check-in fails (late bus, phone issues, room change), students need a simple appeal flow
+            that still keeps integrity for instructors.
+          </p>
+          <ul>
+            <li>Submit an exception request with a reason</li>
+            <li>Instructor can approve/reject</li>
+            <li>Creates a clear trail for fairness</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section class="card" id="solution">
+      <h2>The Solution</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        Core flows: mark attendance → generate reports → handle exceptions.
+      </p>
+
+      <div class="grid-3">
+        <div class="mini">
+          <h3>1) Mark Attendance</h3>
+          <p>
+            Students choose the class session, the system updates geolocation, and then marks them present/absent based
+            on classroom coordinates.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>2) Create Reports</h3>
+          <p>
+            Professors request a report for a specific date; the system pulls that day’s attendance data and outputs
+            present/absent summaries.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>3) Attendance Exceptions</h3>
+          <p>
+            If needed, students submit an exception record (reason + notes). Professors review and approve/reject.
+          </p>
+        </div>
+      </div>
+
+      <div class="media">
+        <img src="../images/ClassCheck.png" alt="ClassCheck screenshot (dashboard / flow)" />
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="card" id="architecture">
+      <h2>System Architecture</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        How the browser, APIs, auth, and database connect.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>Frontend (web)</h3>
+          <p>
+            UI for students/professors with role-specific pages. Location is requested via browser geolocation, then sent
+            to the backend for attendance marking.
+          </p>
+          <div class="chips" style="margin-top:0.65rem;">
+            <span class="chip">HTML/CSS/JS</span>
+            <span class="chip peach">Browser Geolocation</span>
+          </div>
+        </div>
+
+        <div class="mini">
+          <h3>Backend + Services</h3>
+          <p>
+            REST APIs handle profiles, class data, attendance records, exception submissions, and report generation.
+            Firebase enables real-time syncing for structured data.
+          </p>
+          <div class="chips" style="margin-top:0.65rem;">
+            <span class="chip">Node.js</span>
+            <span class="chip lav">Firebase</span>
+            <span class="chip">REST</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="media" style="margin-top:0.9rem;">
+        <img src="../images/architecture-diagram.png" alt="Architecture diagram placeholder"
+             onerror="this.closest('.media').style.display='none';" />
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="card" id="security">
+      <h2>Security & Access Control</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        Role-Based Access + MFA Patterns.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>Auth0 + MFA</h3>
+          <p>
+            Authentication uses Auth0, including multi-factor authentication for stronger account protection.
+          </p>
+          <ul>
+            <li>MFA for secure login</li>
+            <li>Prevents unauthorized access to attendance data</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Role-Based Routing</h3>
+          <p>
+            After login, the system stores user role and routes to the correct dashboard (student vs professor). Role is
+            set as a custom claim on the tokens so the frontend can enforce access consistently.
+          </p>
+          <ul>
+            <li>Role persisted via Auth0 post-login action</li>
+            <li>Namespaced claim example: <code>https://classcheck.com/role</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATABASE -->
+    <section class="card" id="database">
+      <h2>Database Design (Firebase Realtime DB)</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        Structured NoSQL schema for attendance, exceptions, classes, and user profiles.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>Attendance Records</h3>
+          <p>
+            Attendance is stored by course and date, keyed by student NetID, including coordinates and check-in time.
+          </p>
+          <ul>
+            <li>Status + timestamp</li>
+            <li>Latitude/longitude for verification</li>
+            <li>Student identifiers for reporting</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Exceptions (appeals)</h3>
+          <p>
+            Exception requests are stored as separate records containing the reason, notes, status, and professor/student identifiers.
+          </p>
+          <ul>
+            <li>Professor can approve/reject</li>
+            <li>Creates an auditable workflow</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:0.9rem;">
+  <div class="media">
+    <img src="../images/er-diagram.png"
+         alt="Entity relationship diagram for ClassCheck"
+         onerror="this.closest('.media').style.display='none';" />
+    <div class="caption">
+      Entity–relationship diagram showing how classes, students, attendance records,
+      and exception requests are structured.
+    </div>
+  </div>
+
+  <div class="media">
+    <img src="../images/firebase-schema.png"
+         alt="Firebase Realtime Database schema for ClassCheck"
+         onerror="this.closest('.media').style.display='none';" />
+    <div class="caption">
+      Firebase Realtime Database schema illustrating how attendance and exception data
+      are stored and accessed in real time.
+    </div>
+  </div>
+</div>
+
+
+    </section>
+
+    <!-- FLOWS -->
+    <section class="card" id="flows">
+      <h2>Key Flows</h2>
+      </p>
+
+      <div class="grid-3">
+        <div class="mini">
+          <h3>Geolocation Check-in</h3>
+          <p>
+            Browser collects coordinates (with permission) → backend stores location + creates a new attendance record tied to the user NetID.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>Report Generation</h3>
+          <p>
+            Professor selects a date → system queries attendance for that course/date → outputs present/absent summaries that are easy to review.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>Exception Review</h3>
+          <p>
+            Student submits appeal → professor dashboard lists pending exceptions → professor approves/rejects → status updates and stays traceable.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="card" id="results">
+      <h2>Outcomes & Learnings</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+      </p>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>What We Delivered</h3>
+          <ul>
+            <li>Role-based dashboards (student/professor)</li>
+            <li>Attendance marking with geolocation validation</li>
+            <li>Attendance reporting workflow (daily + student-level views)</li>
+            <li>Exception/appeal portal with approve/reject</li>
+            <li>MFA-secured login + token-based role enforcement</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Next Improvements</h3>
+          <ul>
+            <li>Polish UI states (empty states, errors, confirmations)</li>
+            <li>Better analytics/visualizations in reports</li>
+            <li>Edge-case handling (room changes, GPS drift)</li>
+            <li>Automated notifications (reminders + success/failure)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMBED REPORT -->
+    <section class="card" id="report">
+  <h2>Project Report</h2>
+  </p>
+
+  <div class="embed" aria-label="Embedded ClassCheck report PDF">
+    <iframe
+      src="../images/classcheck-report.pdf#view=FitH"
+      title="ClassCheck report PDF"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <div class="hero-actions" style="margin-top:0.9rem;">
+    <a class="btn btn-ghost" href="../images/classcheck-report.pdf" download>Download PDF</a>
+  </div>
+    <div class="hero-actions" style="margin-top:1rem;">
+        <a class="btn" href="#top">Back To Top ↑</a>
+      </div>
+    </section>
+</section>
+    <footer>
+      <div>&copy; <span id="year"></span> Rashmee Gade • ClassCheck</div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
