@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SyncTime Case Study | Rashmee Gade</title>
+  <meta name="description" content="SyncTime case study — a Google Calendar social extension concept to simplify shared scheduling." />
+
+  <!-- Aesthetic fonts (matches your index styling) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fbfbff;
+      --card:rgba(255,255,255,0.78);
+      --text:#1f2937;
+      --muted:#6b7280;
+
+      --lav:#cdb4ff;
+      --sky:#a2d2ff;
+      --pink:#ffc8dd;
+      --peach:#ffd6a5;
+
+      --border:rgba(31,41,55,0.10);
+      --shadow:0 10px 30px rgba(31,41,55,0.08);
+      --shadow-soft:0 6px 18px rgba(31,41,55,0.06);
+
+      --radius:18px;
+      --radius-sm:14px;
+
+      --link:#3b82f6;
+      --focus:rgba(59,130,246,0.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(205,180,255,0.35), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(162,210,255,0.35), transparent 55%),
+        radial-gradient(900px 600px at 30% 85%, rgba(255,200,221,0.30), transparent 55%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      min-height:100vh;
+    }
+
+    h1,h2,h3{ font-family:"Fraunces",serif; margin:0; }
+    p{ margin:0; line-height:1.75; }
+    a{ color:var(--link); text-decoration:none; font-weight:800; }
+    a:hover{ text-decoration:underline; }
+
+    .container{
+      width:min(980px, calc(100% - 2rem));
+      margin:0 auto;
+      padding: 1.6rem 0 2.4rem;
+    }
+
+    /* Top bar */
+    .toprow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.5rem;
+      padding:0.72rem 1rem;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,0.10);
+      background:rgba(255,255,255,0.75);
+      box-shadow:var(--shadow-soft);
+      font-weight:800;
+      color:var(--text);
+      text-decoration:none;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:var(--shadow); }
+    .btn:focus{ outline:3px solid var(--focus); outline-offset:2px; }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(205,180,255,0.85), rgba(255,200,221,0.75));
+      border:1px solid rgba(31,41,55,0.08);
+    }
+    .btn-ghost{
+      background:transparent;
+      box-shadow:none;
+    }
+    .btn-ghost:hover{ background:rgba(205,180,255,0.18); }
+
+    /* Cards / sections */
+    .hero{
+      border-radius:var(--radius);
+      background:linear-gradient(135deg, rgba(162,210,255,0.22), rgba(255,200,221,0.18));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      padding: 1.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      padding:1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .muted{ color:var(--muted); font-weight:650; }
+    .small{ font-size:0.95rem; }
+    .lead{ font-size:1.05rem; }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem;
+      margin-top: 0.9rem;
+    }
+    .chip{
+      padding:0.35rem 0.65rem;
+      border-radius:999px;
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      font-weight:800;
+      font-size:0.85rem;
+      color:#334155;
+    }
+    .chip.lav{ background:rgba(205,180,255,0.20); }
+    .chip.pink{ background:rgba(255,200,221,0.25); }
+    .chip.peach{ background:rgba(255,214,165,0.25); }
+    .chip.sky{ background:rgba(162,210,255,0.18); }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.6rem;
+      margin-top: 1rem;
+    }
+
+    /* Two-column info block */
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+
+    .mini{
+      background:rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+    }
+    .mini h3{
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+
+    /* Lists */
+    ul{
+      margin: 0.55rem 0 0;
+      padding-left: 1.2rem;
+      color:#374151;
+      font-weight:650;
+      line-height:1.65;
+    }
+
+    /* Image blocks */
+    .img-wrap{
+      margin-top: 0.9rem;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,0.75);
+    }
+    .img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .img-cap{
+      padding: 0.75rem 0.95rem;
+      border-top:1px solid rgba(31,41,55,0.08);
+      font-weight:800;
+      color:#374151;
+      font-size:0.95rem;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 0.9rem;
+    }
+
+    /* Embed containers */
+    .embed{
+      margin-top: 0.9rem;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,0.10);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,0.75);
+      height: min(80vh, 820px);
+    }
+    .embed iframe, .embed object{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    /* Sidebar in-page nav */
+    .subnav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem;
+      margin-top: 0.9rem;
+    }
+    .subnav a{
+      font-weight:850;
+      color:#374151;
+      background: rgba(255,255,255,0.72);
+      border:1px solid rgba(31,41,55,0.10);
+      padding:0.45rem 0.7rem;
+      border-radius:999px;
+      text-decoration:none;
+    }
+    .subnav a:hover{ background: rgba(205,180,255,0.20); }
+
+    footer{
+      text-align:center;
+      padding: 1.25rem 0 0.5rem;
+      color: var(--muted);
+      font-weight:650;
+    }
+
+    @media (max-width: 860px){
+      .grid-2{ grid-template-columns: 1fr; }
+      .gallery{ grid-template-columns: 1fr; }
+      .embed{ height: min(70vh, 720px); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Top row -->
+    <div class="toprow">
+      <a class="btn" href="../index.html">← Back To Home</a>
+      <div class="muted small">SyncTime • BluePrint @ Rutgers • Fall 2025</div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.6rem); letter-spacing:-0.03em;">SyncTime</h1>
+      <p class="muted lead" style="margin-top:0.4rem;">
+        A Google Calendar “social extension” concept that helps groups find mutual availability quickly without the back-and-forth texting.
+      </p>
+
+      <div class="chips" aria-label="Key skills and tools">
+        <span class="chip lav">Figma</span>
+        <span class="chip pink">User Research</span>
+        <span class="chip sky">Wireframes</span>
+        <span class="chip peach">Prototyping</span>
+        <span class="chip">Presentation</span>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#prototype">View Prototype</a>
+        <a class="btn" href="../images/UI_UX-Presentation.pdf" target="_blank" rel="noreferrer">Open Deck</a>
+        <a class="btn btn-ghost" href="../images/UI_UX-Presentation.pdf" download>Download PDF</a>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini">
+          <h3>My Role</h3>
+          <p class="muted">
+            UI/UX Designer (research → wireframes → prototype), working with a 4-person design team through feedback cycles and a final presentation.
+          </p>
+        </div>
+        <div class="mini">
+          <h3>Goal</h3>
+          <p class="muted">
+            Make scheduling feel “built-in” to the calendar: faster overlaps, fewer messages, and clearer next steps.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="card" id="problem">
+      <h2>Problem</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        Even when everyone uses Google Calendar, planning something with friends or a group often turns into texting:
+        “Are you free?” “What about Tuesday?” “No, I’m busy.” SyncTime focuses on one pain point which is quickly finding overlapping availability,
+        and turning it into a simple, guided flow.
+      </p>
+    </section>
+
+    <!-- RESEARCH -->
+    <section class="card" id="research">
+      <h2>Research & Key Insights</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        We used survey research to understand how people currently coordinate and what gets in the way.
+      </p>
+
+      <ul>
+        <li><b>47</b> total responses (primary demographic: 18–22)</li>
+        <li><b>97.9%</b> rely on messaging apps to coordinate availability</li>
+        <li><b>66%</b> don’t use Guest Permissions (often too hidden/complex)</li>
+        <li><b>68.1%</b> rated Google Calendar <b>4/5</b> → the issue is a missing “group scheduling” layer</li>
+      </ul>
+
+      <div class="img-wrap">
+        <img src="../images/survey-results.png" alt="Survey results summary for SyncTime">
+      </div>
+    </section>
+
+    <!-- PERSONA -->
+    <section class="card" id="persona">
+      <h2>User Persona</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        We grounded the concept around a user who already uses calendar tools, but still ends up coordinating in messages.
+      </p>
+
+      <div class="img-wrap">
+        <img src="../images/user-persona.png" alt="User persona for SyncTime">
+      </div>
+    </section>
+
+    <section class="card" id="design">
+      <h2>Design Process</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        We explored how to keep the experience lightweight: compare schedules, surface overlaps, and suggest next steps
+        without overwhelming users with settings. The final direction focuses on clarity, speed, and “what do I do now?”
+      </p>
+
+      <div class="gallery">
+        <div class="img-wrap">
+          <img src="../images/lofi-wireframes.png" alt="Lo-fi wireframes for SyncTime">
+          <div class="img-cap">Lo-fi wireframes</div>
+        </div>
+
+        <div class="img-wrap">
+          <img src="../images/hifi-wireframes.png" alt="Hi-fi wireframes for SyncTime">
+          <div class="img-cap">Hi-fi screens</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:0.9rem;">
+        <div class="mini">
+          <h3>Design Decisions</h3>
+          <ul>
+            <li>Reduce steps: pick group → see overlap → pick time</li>
+            <li>Show “best options” first instead of making users hunt</li>
+            <li>Keep it friendly + social (not corporate scheduling)</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>What I’d Measure Next</h3>
+          <ul>
+            <li>Time to schedule (start → confirmed time)</li>
+            <li>Confusion points (where users hesitate)</li>
+            <li>Preference: suggested times vs manual selection</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROTOTYPE -->
+    <section class="card" id="prototype">
+      <h2>Prototype (Figma)</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        You can interact with the prototype directly here. If it doesn’t load, use “Open in Figma” (permissions may require “Anyone with link can view”).
+      </p>
+
+      <div class="hero-actions" style="margin-top:0.9rem;">
+        <a class="btn btn-primary" href="https://www.figma.com/proto/XQTwPhbIiq4GmI3mRbKUlv/Team-2?node-id=71-80&p=f&t=FjMfGoPnuGxcIhpr-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=71%3A80"
+           target="_blank" rel="noreferrer">Open in Figma</a>
+      </div>
+
+      <div class="embed" aria-label="Embedded Figma prototype">
+        <iframe
+          title="SyncTime Figma Prototype"
+          loading="lazy"
+          allowfullscreen
+          src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FXQTwPhbIiq4GmI3mRbKUlv%2FTeam-2%3Fnode-id%3D71-80%26p%3Df%26t%3DFjMfGoPnuGxcIhpr-0%26scaling%3Dscale-down%26content-scaling%3Dfixed%26page-id%3D0%253A1%26starting-point-node-id%3D71%253A80">
+        </iframe>
+      </div>
+      </p>
+    </section>
+
+    <!-- PRESENTATION -->
+    <section class="card" id="deck">
+      <h2>Presentation Deck</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        The deck includes the research summary, design rationale, and the final concept.
+      </p>
+
+      <div class="hero-actions" style="margin-top:0.9rem;">
+        <a class="btn btn-primary" href="../images/UI_UX-Presentation.pdf" target="_blank" rel="noreferrer">Open PDF in new tab</a>
+        <a class="btn" href="../images/UI_UX-Presentation.pdf" download>Download PDF</a>
+      </div>
+
+      <!-- PDF embed -->
+      <div class="embed" style="margin-top:0.9rem;">
+        <iframe
+          src="../images/UI_UX-Presentation.pdf#view=FitH"
+          title="SyncTime UI/UX Presentation PDF"
+          loading="lazy">
+        </iframe>
+      </div>
+      </p>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="card" id="reflection">
+      <h2>Reflection & Next Steps</h2>
+      <p class="muted" style="margin-top:0.55rem;">
+        If I continued this project, I’d validate the flow with a few quick usability tests and then tighten the experience around edge cases.
+      </p>
+
+      <div class="grid-2" style="margin-top:0.9rem;">
+        <div class="mini">
+          <h3>What I Learned</h3>
+          <ul>
+            <li>“Scheduling” is emotional; people want fast clarity, not more settings.</li>
+            <li>Small UX changes can remove a ton of coordination friction.</li>
+            <li>Presenting design decisions clearly matters as much as making the screens.</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>Next Features</h3>
+          <ul>
+            <li>Time zone handling and “best times” ranking</li>
+            <li>Availability preferences (e.g., “no mornings”)</li>
+            <li>Lightweight reminders + shareable summary</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero-actions" style="margin-top:1rem;">
+        <a class="btn" href="#top">Back To Top ↑</a>
+      </div>
+    </section>
+
+    <footer>
+      <div>&copy; <span id="year"></span> Rashmee Gade • SyncTime</div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
